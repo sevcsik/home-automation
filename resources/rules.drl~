@@ -1,0 +1,14 @@
+package home-automation.core
+
+rule "Dolgozószobai lámpa felkapcsolása"
+     when
+	Map(
+		this["event"]["source"] == "dolgozo.iroasztal.kapcsolo" &&
+		this["event"]["action"] == "ON"
+	)
+     then
+        Map message = new HashMap()
+	message["target"] = "dolgozo.iroasztal.lampa"
+	message["action"] = "ON"
+	insert(message)
+	

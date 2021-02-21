@@ -1,0 +1,54 @@
+package home_automation.rules
+
+import java.util.Map
+
+rule "Teszt"
+   when
+      $s : String( )
+   then
+      System.out.println("Rule executed: " + $s);
+end
+     
+
+
+// import java.util.Map
+// import java.util.HashMap
+
+// function Map mkAction(String target, String action) {
+// 	 Map message = new HashMap();
+// 	 Map content = new HashMap();
+
+// 	 content.put("target", target);
+// 	 content.put("action", action);
+// 	 message.put("action", message);
+
+// 	 return message;
+// }
+
+// function Boolean eventHasSource(Map e, String source) {
+// 	 return e.get("source").equals(source);
+// }
+
+// function Boolean eventHasAction(Map e, String source) {
+// 	 return e.get("source").equals(source);
+// }
+
+// rule "Dolgozószobai lámpa felkapcsolása"
+//      when
+// 	Map(
+// 		eval(eventHasSource(this["event"], "dolgozo.iroasztal.kapcsolo")) &&
+// 		eval(eventHasAction(this["event"], "on"))
+// 	)
+//      then
+// 	insert(mkAction("dolgozo.iroasztal.lampa", "on"))
+
+// rule "Dolgozószobai lámpa lekapcsolása"
+//      when
+// 	Map(
+// 		eval(eventHasSource(this["event"], "dolgozo.iroasztal.kapcsolo")) &&
+// 		eval(eventHasAction(this["event"], "off"))
+// 	)
+//      then
+// 	insert(mkAction("dolgozo.iroasztal.lampa", "off"))
+
+
