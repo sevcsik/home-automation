@@ -12,7 +12,7 @@ declare Action
    action: String
 end
 
-rule "dolgozo.iroasztal.kapcsolo toggle"
+rule "bind dolgozo.iroasztal.kapcsolo to dolgozo.iroasztal.lampa"
    when
       Event(source == "dolgozo.iroasztal.kapcsolo", $action: action)
    then
