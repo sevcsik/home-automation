@@ -14,9 +14,11 @@ end
 
 rule "bind dolgozo.iroasztal.kapcsolo to dolgozo.iroasztal.lampa"
    when
-      Event(source == "dolgozo.iroasztal.kapcsolo", $action: action)
+      $event: Event(source == "dolgozo.iroasztal.kapcsolo", $action: action)
    then
-      insert(new Action("dolgozo.iroasztal.lampa", $action));
+      System.out.println("Received event: " + $event);
+      Action action = new Action("dolgozo.iroasztal.lampa", $action);
+      insert(action);
 end
 
 // import java.util.Map
