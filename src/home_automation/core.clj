@@ -10,6 +10,9 @@
 (import org.kie.api.KieServices)
 (import org.kie.api.event.rule.RuleRuntimeEventListener)
 
+(def mqtt-url (System/getProperty "home_automation.mqtt_url" "tcp://localhost:1883"))
+(def mqtt-topic (System/getProperty "home_automation.mqtt_topic" "zigbee2mqtt"))
+
 (defn get-fact-type [ks klass] (.getFactType (.getKieBase ks) "home_automation.rules" klass))
 
 (defn create-event
@@ -47,21 +50,24 @@
     (log/debug "Received event: " event)
     (.insert ks event)))
 
-(defn on-action [mqtt-conn obj] (println "OBJ: " obj))
+(defn on-action [mqtt-conn obj]
+  (log/debug "Sendingn action action: " obj))
 
-(def mqtt-url "tcp://localhost:1883")
-(def mqtt-topic "zigbee2mqtt")
 (defn -main
   [& args]
-  (log/infof "Connecting to mqtt on %s..." mqtt-url)
+  (log/info "Connecting to mqtt on" mqtt-url)
+  (log/info "Listening on mqtt to topic" (str mqtt-topic "/#"))
   (log/info "Initialising Drools")
   (let [ks (init-knowledge-session (init-kie-container))
-        mqtt-conn (mh/connect "tcp://localhost:1883")
-        ks-cb (fn [evt] (let [obj (.getObject evt)] (when (is-action obj) (on-action mqtt-conn obj))))
-        mqtt-cb (fn [topic _ payload] (on-message ks topic payload))]
+        mqtt-conn (mh/connect mqtt-url)
+        ks-cb (fn [evt]
+                (log/debug "Received object in KS working memory" evt)
+                (let [obj (.getObject evt)] (when (is-action (.getObject evt)) (on-action mqtt-conn obj))))
+        mqtt-cb (fn [topic _ payload]
+                  (log/debug "Received MQTT message" topic payload)
+                  (on-message ks topic payload))]
     (mh/subscribe mqtt-conn { (str mqtt-topic "/#") 0 } mqtt-cb)
     (ks-add-rule-runtime-event-listener ks ks-cb (constantly nil) (constantly nil))
-    (log/info "Listening on mqtt to topic" (str mqtt-topic "/#"))
     (log/debug "Sleeping...")
     (Thread/sleep Long/MAX_VALUE))) ;TODO learn a better way to sleep forever
     
