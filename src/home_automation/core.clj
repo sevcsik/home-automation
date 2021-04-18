@@ -62,6 +62,7 @@
     (mh/subscribe mqtt-conn { (str mqtt-topic "/#") 0 } mqtt-cb)
     (ks-add-rule-runtime-event-listener ks ks-cb (constantly nil) (constantly nil))
     (log/info "Listening on mqtt to topic" (str mqtt-topic "/#"))
+    (log/debug "Sleeping...")
     (Thread/sleep Long/MAX_VALUE))) ;TODO learn a better way to sleep forever
     
 

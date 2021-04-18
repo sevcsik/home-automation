@@ -13,8 +13,9 @@
 
   <logger name="home_automation" level="debug" />
   <logger name="org.drools" level="warn" />
+  <logger name="org.kie" level="warn" />
 
-  <root level="info">
+  <root level="debug">
     <appender-ref ref="stdout" />
   </root>
 </configuration>
